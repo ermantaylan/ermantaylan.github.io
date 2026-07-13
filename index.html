@@ -191,7 +191,27 @@
 </main>
 
 <script>
-  // Etkinlik adı: ?e=Tofaş%20AI%20Day  (alias: ?etkinlik=)
+  // ===== ETKİNLİK İSİMLERİ: kısa-ad → sayfada görünen ad =====
+  // Yeni satır eklemek yeterli: 'kisa-ad': 'Görünen Ad',
+  var EVENTS = {
+    'tofas-ai-day': 'TOFAŞ AI Day'
+  };
+  // ============================================================
+
+  function trSlug(s) {
+    return s.toLowerCase()
+      .replace(/ğ/g,'g').replace(/ü/g,'u').replace(/ş/g,'s')
+      .replace(/ı/g,'i').replace(/i̇/g,'i').replace(/ö/g,'o').replace(/ç/g,'c')
+      .replace(/[^a-z0-9]+/g,'-').replace(/^-+|-+$/g,'');
+  }
+  function prettify(slug) {
+    var ACR = ['ai','yz','ar','vr','ux','ui','hr','it','iot','api'];
+    return slug.split('-').map(function (w) {
+      return ACR.indexOf(w) > -1 ? w.toUpperCase() : w.charAt(0).toUpperCase() + w.slice(1);
+    }).join(' ');
+  }
+
+  // Etkinlik: ?e=tofas-ai-day  (eski format ?e=Tofaş%20AI%20Day da çalışır)
   var params = new URLSearchParams(location.search);
   var ev = (params.get('e') || params.get('etkinlik') || '');
   // Çift kodlanmış URL'leri toparla (%2520 → %20 → boşluk)
@@ -204,6 +224,14 @@
     }
   } catch (err) {}
   ev = ev.trim().slice(0, 80);
+  if (ev) {
+    var key = trSlug(ev);
+    if (EVENTS[key]) {
+      ev = EVENTS[key];
+    } else if (/^[a-z0-9]+(-[a-z0-9]+)*$/.test(ev)) {
+      ev = prettify(ev);
+    }
+  }
   if (ev) {
     document.getElementById('eventName').textContent = ev;
     document.getElementById('event').classList.add('show');

@@ -72,7 +72,7 @@
 <main class="wrap">
   <a class="back" href="./">← sayfaya dön</a>
   <h1>🎟️ Etkinlik Linki Üret</h1>
-  <p class="sub">Etkinliğin adını yaz; sana özel URL ve QR kod hazır. Boş bırakırsan genel (etkinliksiz) link üretilir — her yerde aynı QR'ı kullanmak istersen bunu kullan.</p>
+  <p class="sub">Etkinliğin adını yaz; temiz kısa-ad formatında URL (örn. <b>?e=tofas-ai-day</b>) ve QR kod hazır. Boş bırakırsan genel (etkinliksiz) link üretilir. Özel yazım (TOFAŞ gibi) için index.html'deki ETKİNLİK İSİMLERİ listesine bir satır ekle; listede yoksa ad otomatik güzelleştirilir.</p>
 
   <label for="ename">Etkinlik adı</label>
   <input type="text" id="ename" placeholder="örn. Tofaş AI Day" autocomplete="off" autofocus>
@@ -115,7 +115,7 @@
 
   function build(){
     var name = input.value.trim();
-    var url = name ? base + '?e=' + encodeURIComponent(name) : base;
+    var url = name ? base + '?e=' + slug(name) : base;
     urlEl.textContent = url;
     prev.href = url;
     qrBox.style.display = 'block';
